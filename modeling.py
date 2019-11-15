@@ -1,6 +1,6 @@
 
 import tensorflow as tf
-from tensorflow.keras.layers import Input, BatchNormalization, MaxPooling2D, Convolution1D, Convolution2D, Flatten, Dense, Dropout, Reshape, Lambda, Concatenate
+from tensorflow.keras.layers import Input, BatchNormalization, MaxPool1D, MaxPooling2D, Convolution1D, Convolution2D, Flatten, Dense, Dropout, Reshape, Lambda, Concatenate
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from time import time
