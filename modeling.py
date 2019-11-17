@@ -178,39 +178,40 @@ class CheckpointCallback(tf.keras.callbacks.Callback):
 
 class EncoderExtractor:
 
-	def __init__(self):
-		inputs = [Input(shape=input_shape) for input_shape in __feature_shape__.values()]
+    def __init__(self):
+        inputs = [Input(shape=input_shape) for input_shape in __feature_shape__.values()]
 
-		#image
-		image = inputs[0]
-		image = get_conv_encoder(image)
-		# vein
-		vein = inputs[1]
-		vein = get_conv_encoder(vein)
-		# xyprojection
-		xyproj = inputs[2]
-		xyproj = get_1dconv_encoder(xyproj)
-		# others
-		handcrafted_features = [get_dense_encoder(vector) for vector in inputs[3:]]
+        #image
+        image = inputs[0]
+        image = get_conv_encoder(image)
+        # vein
+        vein = inputs[1]
+        vein = Reshape((300,300,1))(vein)
+        vein = get_conv_encoder(vein)
+        # xyprojection
+        xyproj = inputs[2]
+        xyproj = get_1dconv_encoder(xyproj)
+        # others
+        handcrafted_features = [get_dense_encoder(vector) for vector in inputs[3:]]
 
-		encoder_outputs_list = [image, vein, xyproj] + handcrafted_features
-		combine = Concatenate()(encoder_outputs_list)
-		self.extractor = Model(inputs, combine)
+        encoder_outputs_list = [image, vein, xyproj] + handcrafted_features
+        combine = Concatenate()(encoder_outputs_list)
+        self.extractor = Model(inputs, combine)
 
-		self.encoders = []
-		for input_tensor, representation in zip(inputs, encoder_outputs_list):
-			softmax = Dense(units=32)(input_tensor)
-			model = Model(input_tensor, softmax)
-			model.compile(optimizer='adam',
-						  loss='sparse_categorical_crossentropy',
-						  metrics=['accuracy'])
-			self.encoders.append(model)
+        self.encoders = []
+        for input_tensor, representation in zip(inputs, encoder_outputs_list):
+            softmax = Dense(units=32)(representation)
+            model = Model(input_tensor, softmax)
+            model.compile(optimizer='adam',
+                          loss='sparse_categorical_crossentropy',
+                          metrics=['accuracy'])
+            self.encoders.append(model)
 
-	def extract(self, X):
-		return self.extractor.predict(X)
+    def extract(self, X):
+        return self.extractor.predict(X)
 
-	def load_encoders(self, modelpaths):
-		for model, path in zip(self.encoders, modelpaths):
-			print("Loading encoder ", path)
-			model.load_weights(path)
+    def load_encoders(self, modelpaths):
+        for model, path in zip(self.encoders, modelpaths):
+            print("Loading encoder ", path)
+            model.load_weights(path)
 

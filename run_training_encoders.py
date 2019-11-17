@@ -29,16 +29,29 @@ def load_feature_data(feature):
 def load_labels():
 	return np.load(__label__)
 
+
+__normalizing_features__ = ['color', 'texture', 'fourier', 'shape', "combine"]
 def normalize_feature_data(feature, X_train, X_valid, X_test):
-
-	if feature in ['color', 'texture', 'fourier', 'shape']:
-		stds = np.std(X_train, axis=0)
-		stds[stds==0.0] = 1.0
-		means = np.mean(X_train, axis=0)
-		X_train = (X_train-means)/stds
-		X_valid = (X_valid-means)/stds
-		X_test = (X_test-means)/stds
-
+    
+	if type(feature) == list:
+		for i, f in enumerate(feature):
+            
+			if f in __normalizing_features__:
+				stds = np.std(X_train[i], axis=0)
+				stds[stds==0.0] = 1.0
+				means = np.mean(X_train[i], axis=0)
+				X_train[i] = (X_train[i]-means)/stds
+				X_valid[i] = (X_valid[i]-means)/stds
+				X_test[i] = (X_test[i]-means)/stds
+	else:
+		if feature in __normalizing_features__:
+			stds = np.std(X_train, axis=0)
+			stds[stds==0.0] = 1.0
+			means = np.mean(X_train, axis=0)
+			X_train = (X_train-means)/stds
+			X_valid = (X_valid-means)/stds
+			X_test = (X_test-means)/stds
+			
 	return X_train, X_valid, X_test
 
 def split_train_test_valid(feature, Kfold, fold, X, y):
@@ -48,9 +61,14 @@ def split_train_test_valid(feature, Kfold, fold, X, y):
     valid_index = Kfold[fold] == "Valid"
     test_index = Kfold[fold] == "Test"
 
-    X_train = X[train_index]
-    X_valid = X[valid_index]
-    X_test = X[test_index]
+    if type(feature) == list:
+        X_train = [x[train_index] for x in X]
+        X_valid = [x[valid_index] for x in X]
+        X_test = [x[test_index] for x in X]
+    else:
+        X_train = X[train_index]
+        X_valid = X[valid_index]
+        X_test = X[test_index]
 
     ## normalize handcrafted features
     X_train, X_valid, X_test = normalize_feature_data(feature, X_train, X_valid, X_test)
