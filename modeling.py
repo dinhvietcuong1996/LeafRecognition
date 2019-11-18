@@ -4,16 +4,8 @@ from tensorflow.keras.layers import Input, BatchNormalization, MaxPool1D, MaxPoo
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from time import time
+from data_helper import __feature_shape__
 
-__feature_shape__ = {
-	'image': [300,300,3],	
-	'vein': [300,300],	
-	'xyprojection': [60,],
-	'color': [36,],
-	'texture': [18,],
-	'fourier': [17,],
-	'shape': [33,],
-}
 
 def get_conv_encoder(image, l2_rate=0.0):
 	"""return convolutional neural network encoder with image as input"""
@@ -151,8 +143,10 @@ class CheckpointCallback(tf.keras.callbacks.Callback):
 		self.verbose = verbose
 		self.best_val_loss = 1000.0
 		self.n_no_improvements = 0
-		self.training_time = time()
 		self.early_stopping = early_stopping
+		
+	def on_train_begin(self):
+		self.training_time = time()
 
 	def on_epoch_end(self, epoch, logs):
 		val_loss = logs['val_loss']
