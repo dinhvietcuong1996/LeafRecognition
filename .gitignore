@@ -10,6 +10,7 @@ features_data/*
 !features_data/labels.npy
 *.ipynb
 *.csv
+!LEAF_v20/*
 !Dataset_10FoldCV_indexed.csv
 .vscode/*
 .gitignore
