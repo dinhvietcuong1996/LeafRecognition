@@ -5,3 +5,13 @@ Leaves_Masked/*
 Processed_Leaves/*
 Dataset_10FoldCV_indexed_models/*
 Vein_images/*
+LEAF_v19/*
+features_data/*
+!features_data/labels.npy
+*.ipynb
+*.csv
+!Dataset_10FoldCV_indexed.csv
+.vscode/*
+.gitignore
+data_helper.py
+

@@ -67,8 +67,8 @@ def run_training_decoders(kfold_file):
         i += 1
 
     print("End of 10-fold CV")
-    print("Valid accuracy: {:.4f} += {:.4f}".format(np.mean(val_accs), np.std(val_accs)))
-    print("Test accuracy: {:.4f} += {:.4f}".format(np.mean(test_accs), np.std(test_accs)))
+    print("Valid accuracy: {:.4f} +- {:.4f}".format(np.mean(val_accs), np.std(val_accs)))
+    print("Test accuracy: {:.4f} +- {:.4f}".format(np.mean(test_accs), np.std(test_accs)))
     best_decoders.to_csv(kfold_file[:-4] + "_decoders.csv", index=False)
 
 if __name__ == "__main__":

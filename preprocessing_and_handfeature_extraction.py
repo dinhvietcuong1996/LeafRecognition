@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
 from scipy.stats import kurtosis, skew
-# import mahotas as mt
+import mahotas as mt
 import skimage.morphology 
+from elliptic_fourier_descriptors import elliptic_fourier_descriptors
 
 ### Preprocessing
 def pad_image_to_square(img, addition=0):
@@ -172,51 +173,51 @@ def get_vein_image(gray):
 def get_texture_features(gray):
     textures = mt.features.haralick(gray)
     ht_mean = textures.mean(axis=0)
-    return list(ht_mean[:12])
+    return list(ht_mean)
 
-import sys
-def progressBar(value, endvalue, bar_length=20):
+def get_elliptic_fourier_descriptors(mask, N=10):
+    efds, _, _ = elliptic_fourier_descriptors(mask, N=N)
+    efds = efds[0]
+    return list(efds.flatten())
 
-    percent = float(value) / endvalue
-    arrow = '-' * int(round(percent * bar_length)-1) + '>'
-    spaces = ' ' * (bar_length - len(arrow))
+def get_xyprojection(mask, bins=30):
+    width = mask.shape[0]//bins
+    n_total_pixels = width*mask.shape[0]
 
-    sys.stdout.write("\rPercent: [{0}] {1}% {2}/{3} ".format(arrow + spaces, int(round(percent * 100)), value, endvalue))
-    sys.stdout.flush()
+    projection = np.empty(shape=(bins*2), dtype=np.float32)
+    for i, bin_s in enumerate(range(0, mask.shape[0], width)):
+        bin_e = bin_s + width
+        projection[i] = np.sum(mask[bin_s:bin_e,:] > 0)
+        projection[i+bins] = np.sum(mask[:,bin_s:bin_e] > 0)
+    projection = projection/n_total_pixels
+    return projection
 
-def run_leaf_rotations(save_images=False):
-    indir = "Leaves"
-    if save_images:
-        outdir = "Processed_Leaves/"
-        if not os.path.exists(outdir):
-            os.mkdir(outdir)
+def get_features(image):
+    ## rotate image
+    rotated_img = rotate_img(image)
+    resized = cv2.resize(rotated_img, (300,300))
 
-    files = os.listdir(indir)
-    files = sorted([f for f in files if f[-4:] == ".jpg"])
-    resized_images = np.empty((1907,300,300,3), dtype=np.uint8)
-    for i, filename in enumerate(files):
-        # filename = "1124.jpg"
-        # if int(filename[:-4]) < 2231 or int(filename[:-4]) > 2290:
-        #     continue
-        filepath = os.path.join(indir, filename)
+    ## extract vein image
+    vein = get_vein_image(cv2.cvtColor(rotated_img, cv2.COLOR_BGR2GRAY))
+    vein = 255*cv2.resize(vein, (300,300))
 
-        img = cv2.imread(filepath)
-        rotated_img = rotate_img(img)
-        vein = get_vein_image(cv2.cvtColor(rotated_img, cv2.COLOR_BGR2GRAY))
-        vein = cv2.resize(vein, (300,300))
-        resized = cv2.resize(rotated_img, (300,300))
-        resized_images[i] = resized
-        ## save file
+    ## preparation for handcrafted feature extraction
+    gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+    mask, contour = get_binary_mask(gray, return_contour=True)
 
-        if save_images:
-            outpath = os.path.join(outdir, filename)
-            cv2.imwrite(outpath, resized)
-            cv2.imwrite("Vein_images/{}".format(filename), vein*255)
-        progressBar(i, 1907)
-        # break
-    np.save(__feature_files__['image'], resized_images)
+    ## color
+    color = get_color_features(resized, mask)
 
-if __name__ == "__main__":
-    from data_helper import __feature_files__, __feature_shape__
-    import os
-    run_leaf_rotations(True)
+    ## shape
+    shape = get_shape_features(contour)
+
+    ## texture
+    texture = get_texture_features(gray)
+
+    ## fourier
+    fourier = get_elliptic_fourier_descriptors(mask, N=10)
+
+    ## xyprojection
+    xyprojection = get_xyprojection(mask)
+
+    return resized, vein, color, shape, texture, fourier, xyprojection

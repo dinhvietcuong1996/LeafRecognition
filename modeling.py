@@ -145,7 +145,7 @@ class CheckpointCallback(tf.keras.callbacks.Callback):
 		self.n_no_improvements = 0
 		self.early_stopping = early_stopping
 		
-	def on_train_begin(self):
+	def on_train_begin(self, logs=None):
 		self.training_time = time()
 
 	def on_epoch_end(self, epoch, logs):

@@ -1,7 +1,6 @@
 import os
 import numpy as np
 
-
 __features__ = ['image', 'vein', 'xyprojection', 'color', 'texture', 'fourier', 'shape']
 
 __feature_shape__ = {
@@ -9,9 +8,9 @@ __feature_shape__ = {
 	'vein': [300,300],	
 	'xyprojection': [60,],
 	'color': [36,],
-	'texture': [18,],
-	'fourier': [17,],
-	'shape': [33,],
+	'texture': [13,],
+	'fourier': [40,],
+	'shape': [38,],
 }
 
 __feature_files__ = {
