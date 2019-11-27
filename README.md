@@ -8,7 +8,7 @@ This repository contains codes in paper A combination of Deep and Handcrafted Fe
 Install required python packages by pip3 
 
 ```console
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### Dataset
