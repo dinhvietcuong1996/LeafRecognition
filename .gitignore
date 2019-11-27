@@ -12,6 +12,7 @@ features_data/*
 *.csv
 !LEAF_v20/*
 !Dataset_10FoldCV_indexed.csv
+!Dataset_10FoldCV_random.csv
 .vscode/*
 .gitignore
 data_helper.py
