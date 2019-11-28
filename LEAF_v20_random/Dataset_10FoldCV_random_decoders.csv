@@ -1,0 +1,11 @@
+kfold_file,fold,model_path,C,gamma,val_acc,test_acc
+Dataset_10FoldCV_random.csv,1,Dataset_10FoldCV_random_models/DECODER-fold1.pickle,100000.0,0.001,1.0,0.9947643979057592
+Dataset_10FoldCV_random.csv,2,Dataset_10FoldCV_random_models/DECODER-fold2.pickle,100000.0,0.001,0.9895287958115183,0.9947643979057592
+Dataset_10FoldCV_random.csv,3,Dataset_10FoldCV_random_models/DECODER-fold3.pickle,100000.0,0.001,1.0,0.9895287958115183
+Dataset_10FoldCV_random.csv,4,Dataset_10FoldCV_random_models/DECODER-fold4.pickle,100000.0,0.001,0.9895287958115183,0.9947368421052631
+Dataset_10FoldCV_random.csv,5,Dataset_10FoldCV_random_models/DECODER-fold5.pickle,100000.0,0.001,1.0,1.0
+Dataset_10FoldCV_random.csv,6,Dataset_10FoldCV_random_models/DECODER-fold6.pickle,100000.0,0.001,0.9947368421052631,1.0
+Dataset_10FoldCV_random.csv,7,Dataset_10FoldCV_random_models/DECODER-fold7.pickle,100000.0,0.001,1.0,0.9947643979057592
+Dataset_10FoldCV_random.csv,8,Dataset_10FoldCV_random_models/DECODER-fold8.pickle,100000.0,0.001,1.0,1.0
+Dataset_10FoldCV_random.csv,9,Dataset_10FoldCV_random_models/DECODER-fold9.pickle,100000.0,0.001,1.0,0.9947643979057592
+Dataset_10FoldCV_random.csv,10,Dataset_10FoldCV_random_models/DECODER-fold10.pickle,100000.0,0.005,1.0,0.9947368421052631
