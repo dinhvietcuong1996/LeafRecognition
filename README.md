@@ -1,5 +1,5 @@
 # LeafRecoginition
-This repository contains codes in paper A combination of Deep and Handcrafted Features for Leaf Recognition.
+This repository contains codes in the paper **An Effective Leaf Recognition Using  Convolutional Neural Networks Based  Features**, which is submitted to the journal Applied Intelligence. 
 
 ## Preperation
 
@@ -52,4 +52,19 @@ This command reads best encoders' filenames in "{Kfoldfile}\_best\_encoders.csv"
 Our experiments' results on Dataset_10FoldCV_indexed.csv are saved on "LEAF_v20". In summary, we reached the result
 Valid accuracy: 0.9979 +- 0.0035
 Test accuracy: 0.9953 +- 0.0037
+
+## Contact
+- Nguyen Thanh Binh  (University of Science Ho Chi Minh city, ngtbinh@hcmus.edu.vn)
+- Dinh Viet Cuong (Dublin City University, dinh.cuong2@mail.dcu.ie)
+- Quach Mai Boi (Dublin City University, mai.quach3@mail.dcu.ie)
+
+## References
+<pre><code> @misc{ung2021efficient,
+      title={An Effective Leaf Recognition Using  Convolutional Neural Networks Based  Features}, 
+      author={Boi M. Quach and Cuong V. Dinh and Nhung Pham and Dang T. Huynh and Binh T. Nguyen},
+      year={2021},
+      eprint={},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}</code></pre>
 
